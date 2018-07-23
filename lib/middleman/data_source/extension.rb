@@ -115,6 +115,8 @@ module Middleman
         end
 
         def get_data source, extension=nil
+          return source[:data] if source.has_key? :data
+          
           if source.has_key? :type
             decoder = decoders[source[:type]]
           else
@@ -132,6 +134,8 @@ module Middleman
           if source[:middleware]
             data = source[:middleware].call data
           end
+          
+          source[:data] = data if source.fetch :cache, false
 
           return data
         end
